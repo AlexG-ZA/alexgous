@@ -1,0 +1,19 @@
+name: Refresh Profile Stats
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every night at midnight
+  workflow_dispatch: # Allows you to run it manually
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Ping GitHub Profile"
+        run: |
+          echo "Last updated on $(date)" > last_update.txt
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add last_update.txt
+          git commit -m "chore: nightly profile stats refresh"
+          git push
